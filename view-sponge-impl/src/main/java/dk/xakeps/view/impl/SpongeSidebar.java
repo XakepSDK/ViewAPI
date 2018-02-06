@@ -35,7 +35,7 @@ public class SpongeSidebar implements Sidebar {
     private SidebarText title;
     private SidebarText belowNameText;
 
-    private Consumer<Sidebar> consumer;
+    private Consumer<Sidebar> updateListener;
 
     private final Object lock = new Object();
 
@@ -131,13 +131,13 @@ public class SpongeSidebar implements Sidebar {
     }
 
     @Override
-    public void registerUpdateListener(Consumer<Sidebar> preUpdateListener) {
-        this.consumer = preUpdateListener;
+    public void setUpdateListener(Consumer<Sidebar> updateListener) {
+        this.updateListener = updateListener;
     }
 
     void update() {
         synchronized (lock) {
-            if(consumer != null) consumer.accept(this);
+            if(updateListener != null) updateListener.accept(this);
             updateBuffer();
             swap();
             updateBuffer();
