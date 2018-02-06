@@ -21,6 +21,7 @@ public class SpongeView {
     public void onServerStart(GameStartedServerEvent event) {
         Sponge.getScheduler().createTaskBuilder().async().intervalTicks(1).execute(new Updater(sidebarManager)).submit(this);
         Sponge.getServiceManager().setProvider(this, SidebarManager.class, sidebarManager);
+        Sponge.getEventManager().registerListeners(this, sidebarManager);
     }
 
     private static final class Updater implements Runnable {
