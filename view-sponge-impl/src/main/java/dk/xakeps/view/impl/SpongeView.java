@@ -2,12 +2,14 @@ package dk.xakeps.view.impl;
 
 import dk.xakeps.view.api.SidebarManager;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 
-@Plugin(id = "view-sponge", name = "View-sponge", description = "Manages sidebars", version = "1.0-SNAPSHOT", authors = "Xakep_SDK")
+@Plugin(id = "view-sponge", name = "View-sponge", description = "Manages sidebars", version = "1.1", authors = "Xakep_SDK")
 public class SpongeView {
     private final SpongeSidebarManager sidebarManager;
 

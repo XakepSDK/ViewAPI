@@ -17,9 +17,11 @@ import org.spongepowered.api.text.format.TextColor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Consumer;
 
 public class SpongeSidebar implements Sidebar {
-    private final Player player;
+    private final UUID viwerId;
     private final Scoreboard scoreboard;
     private final Map<Integer, SidebarText> textMap;
     private final Ring<TextColor> emptyLinesRing;
@@ -33,10 +35,12 @@ public class SpongeSidebar implements Sidebar {
     private SidebarText title;
     private SidebarText belowNameText;
 
+    private Consumer<Sidebar> consumer;
+
     private final Object lock = new Object();
 
-    public SpongeSidebar(Player player) {
-        this.player = player;
+    SpongeSidebar(Player player) {
+        this.viwerId = player.getUniqueId();
         this.scoreboard = Scoreboard.builder().build();
         this.textMap = new HashMap<>();
 
@@ -75,14 +79,18 @@ public class SpongeSidebar implements Sidebar {
 
     @Override
     public void addLine(SidebarText sidebarText) {
-        Optional<Integer> max = textMap.keySet().stream().max(Integer::compareTo);
-        int pos = max.orElse(-1) + 1;
-        setLine(pos, sidebarText);
+        synchronized (lock) {
+            Optional<Integer> max = textMap.keySet().stream().max(Integer::compareTo);
+            int pos = max.orElse(-1) + 1;
+            setLine(pos, sidebarText);
+        }
     }
 
     @Override
     public void setLine(int line, SidebarText sidebarText) {
-        textMap.put(line, sidebarText);
+        synchronized (lock) {
+            textMap.put(line, sidebarText);
+        }
     }
 
     @Override
@@ -99,29 +107,46 @@ public class SpongeSidebar implements Sidebar {
 
     @Override
     public void clear() {
-        textMap.clear();
-        clearBelowNameText();
+        synchronized (lock) {
+            textMap.clear();
+            clearBelowNameText();
+        }
     }
 
     @Override
     public void setBelowNameText(int score, SidebarText sidebarText, ObjectiveDisplayMode displayMode) {
-        this.belowNameText = sidebarText;
-        this.belowNameScore = score;
-        this.belowName.setDisplayMode(displayMode);
-        this.scoreboard.updateDisplaySlot(this.belowName, DisplaySlots.BELOW_NAME);
+        synchronized (lock) {
+            this.belowNameText = sidebarText;
+            this.belowNameScore = score;
+            this.belowName.setDisplayMode(displayMode);
+            this.scoreboard.updateDisplaySlot(this.belowName, DisplaySlots.BELOW_NAME);
+        }
     }
 
     @Override
     public void clearBelowNameText() {
-        this.belowNameText = null;
-        for (Score score : this.belowName.getScores().values()) {
-            belowName.removeScore(score);
+        synchronized (lock) {
+            this.belowNameText = null;
+            for (Score score : this.belowName.getScores().values()) {
+                belowName.removeScore(score);
+            }
+            this.belowName.setDisplayName(Text.EMPTY);
+            this.scoreboard.clearSlot(DisplaySlots.BELOW_NAME);
         }
-        this.belowName.setDisplayName(Text.EMPTY);
-        this.scoreboard.clearSlot(DisplaySlots.BELOW_NAME);
+    }
+
+    @Override
+    public Player getViewer() {
+        return Sponge.getServer().getPlayer(viwerId).orElseThrow(() -> new IllegalStateException("Player is offline!"));
+    }
+
+    @Override
+    public void registerUpdateListener(Consumer<Sidebar> consumer) {
+        this.consumer = consumer;
     }
 
     void update() {
+        if(consumer != null) consumer.accept(this);
         synchronized (lock) {
             updateBuffer();
             swap();

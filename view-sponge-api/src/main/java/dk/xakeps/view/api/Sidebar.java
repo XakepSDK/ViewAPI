@@ -1,6 +1,9 @@
 package dk.xakeps.view.api;
 
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scoreboard.objective.displaymode.ObjectiveDisplayMode;
+
+import java.util.function.Consumer;
 
 public interface Sidebar {
     void setTitle(SidebarText title);
@@ -14,4 +17,7 @@ public interface Sidebar {
 
     void setBelowNameText(int score, SidebarText sidebarText, ObjectiveDisplayMode displayMode);
     void clearBelowNameText();
+
+    Player getViewer();
+    void registerUpdateListener(Consumer<Sidebar> consumer);
 }
