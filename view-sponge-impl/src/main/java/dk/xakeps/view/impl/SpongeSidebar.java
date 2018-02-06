@@ -79,18 +79,14 @@ public class SpongeSidebar implements Sidebar {
 
     @Override
     public void addLine(SidebarText sidebarText) {
-        synchronized (lock) {
-            Optional<Integer> max = textMap.keySet().stream().max(Integer::compareTo);
-            int pos = max.orElse(-1) + 1;
-            setLine(pos, sidebarText);
-        }
+        Optional<Integer> max = textMap.keySet().stream().max(Integer::compareTo);
+        int pos = max.orElse(-1) + 1;
+        setLine(pos, sidebarText);
     }
 
     @Override
     public void setLine(int line, SidebarText sidebarText) {
-        synchronized (lock) {
-            textMap.put(line, sidebarText);
-        }
+        textMap.put(line, sidebarText);
     }
 
     @Override
@@ -107,32 +103,26 @@ public class SpongeSidebar implements Sidebar {
 
     @Override
     public void clear() {
-        synchronized (lock) {
-            textMap.clear();
-            clearBelowNameText();
-        }
+        textMap.clear();
+        clearBelowNameText();
     }
 
     @Override
     public void setBelowNameText(int score, SidebarText sidebarText, ObjectiveDisplayMode displayMode) {
-        synchronized (lock) {
-            this.belowNameText = sidebarText;
-            this.belowNameScore = score;
-            this.belowName.setDisplayMode(displayMode);
-            this.scoreboard.updateDisplaySlot(this.belowName, DisplaySlots.BELOW_NAME);
-        }
+        this.belowNameText = sidebarText;
+        this.belowNameScore = score;
+        this.belowName.setDisplayMode(displayMode);
+        this.scoreboard.updateDisplaySlot(this.belowName, DisplaySlots.BELOW_NAME);
     }
 
     @Override
     public void clearBelowNameText() {
-        synchronized (lock) {
-            this.belowNameText = null;
-            for (Score score : this.belowName.getScores().values()) {
-                belowName.removeScore(score);
-            }
-            this.belowName.setDisplayName(Text.EMPTY);
-            this.scoreboard.clearSlot(DisplaySlots.BELOW_NAME);
+        this.belowNameText = null;
+        for (Score score : this.belowName.getScores().values()) {
+            belowName.removeScore(score);
         }
+        this.belowName.setDisplayName(Text.EMPTY);
+        this.scoreboard.clearSlot(DisplaySlots.BELOW_NAME);
     }
 
     @Override
@@ -141,13 +131,13 @@ public class SpongeSidebar implements Sidebar {
     }
 
     @Override
-    public void registerUpdateListener(Consumer<Sidebar> consumer) {
-        this.consumer = consumer;
+    public void registerUpdateListener(Consumer<Sidebar> preUpdateListener) {
+        this.consumer = preUpdateListener;
     }
 
     void update() {
-        if(consumer != null) consumer.accept(this);
         synchronized (lock) {
+            if(consumer != null) consumer.accept(this);
             updateBuffer();
             swap();
             updateBuffer();

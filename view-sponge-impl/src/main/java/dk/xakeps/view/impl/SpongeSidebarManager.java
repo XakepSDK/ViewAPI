@@ -10,6 +10,7 @@ import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.scoreboard.Scoreboard;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class SpongeSidebarManager implements SidebarManager {
     private final Map<UUID, SpongeSidebar> sidebars;
@@ -20,6 +21,11 @@ public class SpongeSidebarManager implements SidebarManager {
 
     @Override
     public Sidebar createSidebar(Player player) {
+        return createSidebar(player, null);
+    }
+
+    @Override
+    public Sidebar createSidebar(Player player, Consumer<Sidebar> preRegisterListener) {
         UUID uuid = player.getUniqueId();
         if (sidebars.containsKey(uuid)) {
             throw new IllegalStateException("Already initialized!");
@@ -28,6 +34,7 @@ public class SpongeSidebarManager implements SidebarManager {
             throw new IllegalStateException("Player is offline!");
         }
         SpongeSidebar spongeSidebar = new SpongeSidebar(player);
+        if(preRegisterListener != null) preRegisterListener.accept(spongeSidebar);
         sidebars.put(uuid, spongeSidebar);
         return spongeSidebar;
     }

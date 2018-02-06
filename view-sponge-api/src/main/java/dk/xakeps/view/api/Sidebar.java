@@ -19,5 +19,5 @@ public interface Sidebar {
     void clearBelowNameText();
 
     Player getViewer();
-    void registerUpdateListener(Consumer<Sidebar> consumer);
+    void registerUpdateListener(Consumer<Sidebar> preUpdateListener);
 }

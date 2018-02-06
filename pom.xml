@@ -7,7 +7,7 @@
     <groupId>dk.xakeps</groupId>
     <artifactId>view-sponge</artifactId>
     <packaging>pom</packaging>
-    <version>1.1</version>
+    <version>1.2</version>
     <modules>
         <module>view-sponge-api</module>
         <module>view-sponge-impl</module>
