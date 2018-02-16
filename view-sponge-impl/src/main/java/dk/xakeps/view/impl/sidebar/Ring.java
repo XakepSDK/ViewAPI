@@ -1,4 +1,4 @@
-package dk.xakeps.view.impl;
+package dk.xakeps.view.impl.sidebar;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -9,7 +9,8 @@ public class Ring<T> {
     private final T[] ringItems;
     private final RingCycler<T> ringCycler;
 
-    public Ring(Class<T> arr, int ringSize, RingCycler<T> ringCycler) {
+    @SuppressWarnings("unchecked")
+    Ring(Class<T> arr, int ringSize, RingCycler<T> ringCycler) {
         this.ringItems = (T[]) Array.newInstance(arr, ringSize);
         this.ringCycler = ringCycler;
     }

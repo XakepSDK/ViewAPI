@@ -1,4 +1,6 @@
-package dk.xakeps.view.impl;
+package dk.xakeps.view.impl.sidebar;
+
+import java.util.Objects;
 
 public class Pair<K, V> {
     private K key;
@@ -29,25 +31,14 @@ public class Pair<K, V> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Pair<?, ?> pair = (Pair<?, ?>) o;
-
-        if (key != null ? !key.equals(pair.key) : pair.key != null) return false;
-        return value != null ? value.equals(pair.value) : pair.value == null;
+        return Objects.equals(key, pair.key) &&
+                Objects.equals(value, pair.value);
     }
 
     @Override
     public int hashCode() {
-        int result = key != null ? key.hashCode() : 0;
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        return result;
-    }
 
-    @Override
-    public String toString() {
-        return "Pair{" +
-                "key=" + key +
-                ", value=" + value +
-                '}';
+        return Objects.hash(key, value);
     }
 }

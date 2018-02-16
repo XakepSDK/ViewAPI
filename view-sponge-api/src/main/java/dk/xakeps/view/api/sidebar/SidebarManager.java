@@ -1,4 +1,4 @@
-package dk.xakeps.view.api;
+package dk.xakeps.view.api.sidebar;
 
 import org.spongepowered.api.entity.living.player.Player;
 

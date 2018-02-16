@@ -1,7 +1,7 @@
-package dk.xakeps.view.impl;
+package dk.xakeps.view.impl.sidebar;
 
-import dk.xakeps.view.api.Sidebar;
-import dk.xakeps.view.api.SidebarManager;
+import dk.xakeps.view.api.sidebar.Sidebar;
+import dk.xakeps.view.api.sidebar.SidebarManager;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.Root;
@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 public class SpongeSidebarManager implements SidebarManager {
     private final Map<UUID, SpongeSidebar> sidebars;
 
-    SpongeSidebarManager() {
+    public SpongeSidebarManager() {
         this.sidebars = new HashMap<>();
     }
 

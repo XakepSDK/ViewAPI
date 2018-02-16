@@ -1,8 +1,8 @@
-package dk.xakeps.view.impl;
+package dk.xakeps.view.impl.sidebar;
 
-import dk.xakeps.view.api.Sidebar;
-import dk.xakeps.view.api.SidebarText;
-import dk.xakeps.view.api.StaticText;
+import dk.xakeps.view.api.sidebar.Sidebar;
+import dk.xakeps.view.api.sidebar.SidebarText;
+import dk.xakeps.view.api.sidebar.StaticText;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scoreboard.Score;
@@ -135,7 +135,7 @@ public class SpongeSidebar implements Sidebar {
         this.updateListener = updateListener;
     }
 
-    void update() {
+    public void update() {
         synchronized (lock) {
             if(updateListener != null) updateListener.accept(this);
             updateBuffer();

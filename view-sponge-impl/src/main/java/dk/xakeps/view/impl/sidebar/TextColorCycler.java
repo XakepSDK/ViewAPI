@@ -1,4 +1,4 @@
-package dk.xakeps.view.impl;
+package dk.xakeps.view.impl.sidebar;
 
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
