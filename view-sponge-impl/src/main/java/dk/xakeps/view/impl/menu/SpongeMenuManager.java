@@ -9,6 +9,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 
@@ -22,14 +23,14 @@ public class SpongeMenuManager implements MenuManager {
     private final SetMultimap<UUID, String> playerMenus;
     private final MenuViewCleaner menuViewCleaner;
 
-    public SpongeMenuManager(SpongeView pluign) {
+    public SpongeMenuManager(PluginContainer container, SpongeView pluign) {
         this.pluign = pluign;
         this.menus = new HashMap<>();
         this.pagedMenus = new HashMap<>();
         this.menuViews = new HashMap<>();
         this.playerMenus = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
         this.menuViewCleaner = new MenuViewCleaner(this);
-        Task.builder().execute(this.menuViewCleaner).intervalTicks(1).submit(pluign);
+        Task.builder().execute(this.menuViewCleaner).intervalTicks(1).submit(container);
     }
 
     @Override

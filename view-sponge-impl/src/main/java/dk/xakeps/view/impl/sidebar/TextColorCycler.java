@@ -20,7 +20,7 @@ public class TextColorCycler implements Ring.RingCycler<TextColor> {
 
     static {
         for (int i = 0; i < COLORS.length; i++) {
-            NEXT_COLORS.put(COLORS[i], COLORS[i + 1 % COLORS.length]);
+            NEXT_COLORS.put(COLORS[i], COLORS[(i + 1) % COLORS.length]);
         }
     }
 

@@ -10,15 +10,19 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.plugin.PluginContainer;
 
-@Plugin(id = "view-sponge", name = "View-sponge", description = "Manages sidebars", version = "2.0", authors = "Xakep_SDK")
+import javax.inject.Inject;
+
+@Plugin(id = "view-sponge", name = "View-sponge", description = "Manages sidebars", version = "2.2", authors = "Xakep_SDK")
 public class SpongeView {
-    private final SpongeSidebarManager sidebarManager;
-    private final SpongeMenuManager menuManager;
+    private SpongeSidebarManager sidebarManager;
+    private SpongeMenuManager menuManager;
 
-    public SpongeView() {
+    @Inject
+    public SpongeView(PluginContainer container) {
         this.sidebarManager = new SpongeSidebarManager();
-        this.menuManager = new SpongeMenuManager(this);
+        this.menuManager = new SpongeMenuManager(container, this);
     }
 
     @Listener
